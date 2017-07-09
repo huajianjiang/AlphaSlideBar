@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">AlphaSlideBar</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="test">Subclasses of Layout use this constructor to set the display text, width, and other standard properties.Subclasses of Layout use this constructor to set the display text,Subclasses of Layout use this constructor to set the display text</string>
+
+</resources>
