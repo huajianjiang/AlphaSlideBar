@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -14,6 +14,22 @@
         android:id="@+id/rv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:listitem="@layout/item_text"/>
+        tools:listitem="@layout/item_text"
+        android:visibility="visible"/>
 
-</LinearLayout>
+    <com.github.huajianjiang.alphaslidebar.ExpandableTextView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/txt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxLines="3"
+        android:paddingBottom="4dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingTop="8dp"
+        android:text="@string/test"
+        android:textSize="18sp"
+        android:visibility="gone"/>
+
+</FrameLayout>

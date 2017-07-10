@@ -45,15 +45,14 @@ public class MainActivity extends AppCompatActivity {
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
             Item item = mItems.get(position);
             Holder h = (Holder) holder;
-            Logger.e(TAG, "onBindViewHolder==>" + h.mTextView.getCompatMaxLines());
-            h.mView.setVisibility(item.expandable ? View.VISIBLE : View.GONE);
+            final ExpandableTextView tv = h.tv;
+            h.more.setVisibility(item.expandable ? View.VISIBLE : View.GONE);
             if (item.expanded) {
-                h.mTextView.setMaxLines(Integer.MAX_VALUE);
+                tv.setMaxLines(Integer.MAX_VALUE);
             } else {
-                h.mTextView.setMaxLines(3);
+                tv.setMaxLines(tv.getOriginalMaxLines());
             }
-
-            h.mTextView.setText(item.txt);
+            tv.setText(item.txt);
         }
 
         @Override
@@ -67,15 +66,15 @@ public class MainActivity extends AppCompatActivity {
         }
 
         private class Holder extends RecyclerView.ViewHolder {
-            ExpandableTextView mTextView;
-            View mView;
+            ExpandableTextView tv;
+            View more;
 
             public Holder(View itemView) {
                 super(itemView);
-                mTextView = (ExpandableTextView) itemView.findViewById(R.id.txt);
-                mView = itemView.findViewById(R.id.view);
+                tv = (ExpandableTextView) itemView.findViewById(R.id.txt);
+                more = itemView.findViewById(R.id.view);
 
-                mTextView.setOnExpandableStateChangeListener(
+                tv.setOnExpandableStateChangeListener(
                         new ExpandableTextView.OnExpandableStateChangeListener() {
                             @Override
                             public void onExpandableStateChanged(ExpandableTextView who,
@@ -83,20 +82,37 @@ public class MainActivity extends AppCompatActivity {
                             {
                                 Item item = mItems.get(getAdapterPosition());
                                 item.expandable = expandable;
-                                mView.setVisibility(item.expandable ? View.VISIBLE : View.GONE);
+                                more.setVisibility(item.expandable ? View.VISIBLE : View.GONE);
                             }
                         });
+                tv.setExpandListener(new ExpandableTextView.OnExpandListener() {
+                    @Override
+                    public void onExpand(ExpandableTextView who) {
+                        Item item = mItems.get(getAdapterPosition());
+                        item.expanded = true;
+                    }
+                });
 
-                mView.setOnClickListener(new View.OnClickListener() {
+                tv.setCollapseListener(new ExpandableTextView.OnCollapseListener() {
+                    @Override
+                    public void onCollpase(ExpandableTextView who) {
+                        Item item = mItems.get(getAdapterPosition());
+                        item.expanded = false;
+                    }
+                });
+
+                more.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Item item = mItems.get(getAdapterPosition());
-                        if (item.expanded) {
-                            mTextView.setMaxLines(mTextView.getCompatMaxLines());
+                        final boolean expanded = item.expanded;
+                        if (expanded) {
+                            Logger.e(TAG, "request collapse");
+                            tv.collapse(true);
                         } else {
-                            mTextView.setMaxLines(Integer.MAX_VALUE);
+                            Logger.e(TAG, "request expand");
+                            tv.expand(true);
                         }
-                        item.expanded = !item.expanded;
                     }
                 });
             }
